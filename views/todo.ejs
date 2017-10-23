@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <a href="/" title="Go back to the apps list">Go back</a>
+    <h1><%= title %></h1>
+    <ul>
+      <% todoItems.forEach(function(todo, index) { %>
+      <li><a href="/todo/delete/<%= index %>">✘</a> <%= todo %></li>
+      <% }); %>
+    </ul>
+    <form action="/todo/add" method="post">
+      <label for="newItem">New todo item</label>
+      <input type="text" name="newItem" id="newItem" autofocus />
+      <input type="submit" title="Add">
+    </form>
+  </body>
+</html>
