@@ -6,7 +6,14 @@ Learning Node.JS using Express.
   <li>
     <h3>Simple Todo List app</h3>
     <p>This app uses `cookie-session` node module to maintain the session and
-                creates a simple todo app with add & delete operations.</p></li>
+                creates a simple todo app with add & delete operations.</p>
+  </li>
+  <li>
+      <h3>Understanding Socket.io</h3>
+      <p>This little exercise app uses `socket.io` node module. Giving an overview of
+      how to send and receive messages and custom data between client & server using socket.io </p>
+      <i>See the server code in - `/bin/www` file.</i>
+    </li>
 </ul>
 
 <h2>Installation Instructions:</h2>

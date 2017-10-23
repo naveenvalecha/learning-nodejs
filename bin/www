@@ -22,6 +22,31 @@ app.set('port', port);
 var server = http.createServer(app);
 
 /**
+ * Loading socket.io
+ */
+var io = require('socket.io').listen(server);
+
+// When a client connects to the server
+io.sockets.on('connection', function (socket) {
+  // Server sends back a message signal to the client.
+  socket.emit('message', 'You are connected!');
+
+  // Broadcasting a message: `The other clients receives an alert when someone new connects to the server`
+  socket.broadcast.emit('message', 'Another client has just connected!');
+
+  // When the server receives a “message” type signal from the client, log it.
+  socket.on('message', function (message) {
+    console.log(socket.username + ' client is speaking to me! They are saying: ' + message);
+  });
+
+  // Recieving a `little_newbie` signal from client and creating a socket variable.
+  socket.on('little_newbie', function (username) {
+    socket.username = username;
+  })
+});
+
+
+/**
  * Listen on provided port, on all network interfaces.
  */
 

@@ -7,10 +7,15 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser'); // Loads the piece of middleware for managing the settings
 var sassMiddleware = require('node-sass-middleware');
 
+// Routes
 var index = require('./routes/index');
+// TodoApp routes
 var todo = require('./routes/todoApp/todo');
 var todoAdd = require('./routes/todoApp/todoAdd');
 var todoDel = require('./routes/todoApp/todoDel');
+
+// Socket.io app routes
+var socketApp = require('./routes/socketApp/main_server');
 
 var app = express();
 
@@ -35,10 +40,16 @@ app.use(sassMiddleware({
   sourceMap: true
 }));
 
+// Main index file
 app.use('/', index);
+
+// TodoApp
 app.use('/', todo);
 app.use('/', todoAdd);
 app.use('/', todoDel);
+
+// Socket.io App
+app.use('/', socketApp);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

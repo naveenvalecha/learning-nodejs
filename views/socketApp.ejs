@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Socket.io App</title>
+  </head>
+  <body>
+    <h1>Communication with socket.io!</h1>
+    <p><input type="button" value="Poke the server" id="poke" /></p>
+
+    <!--
+      We retrieve the socket.io.js file from the client.
+      This is automatically provided by the Node.js server via the socket.io module
+    -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!--
+      Connected to the server.
+    -->
+    <script>
+      var socket = io.connect('http://localhost:3000');
+
+      // A dialog box will appear when server sends a message signal.
+      socket.on('message', function(message) {
+        alert('The server has sent a message for you: ' + message);
+      });
+
+      // When we click on a `Poke the server` button, it sends a message signal to the server.
+      document.getElementById("poke").addEventListener("click", function () {
+        var message = prompt('What\'s your message to the server?');
+        alert('Going to send a message to server, You need to look at the console to read this message.');
+        socket.emit('message', message);
+      });
+
+      // Trying to send variable using `socket`.
+      // Let's ask visitor to provide a username.
+      var username = prompt('What\'s your username?');
+      // The variable username is sent to the server with a signal `little_newbie`.
+      socket.emit('little_newbie', username);
+    </script>
+  </body>
+</html>
