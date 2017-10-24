@@ -17,6 +17,9 @@ var todoDel = require('./routes/todoApp/todoDel');
 // Socket.io app routes
 var socketApp = require('./routes/socketApp/main_server');
 
+// Real-time Chat app routes
+var chatApp = require('./routes/chat/client');
+
 var app = express();
 
 /* Using sessions */
@@ -50,6 +53,9 @@ app.use('/', todoDel);
 
 // Socket.io App
 app.use('/', socketApp);
+
+// Real-time Chat App
+app.use('/', chatApp);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -14,6 +14,16 @@ Learning Node.JS using Express.
       how to send and receive messages and custom data between client & server using socket.io </p>
       <i>See the server code in - `/bin/www` file.</i>
     </li>
+    <li>
+      <h3>Real-time Chat client with Socket.io</h3>
+      <p>This app just uses again a `socket.io` node module and does these tasks:
+        <ul>
+          <li>Ask for the Name with a dialog box when the person connects to the website OR  (optionally) they can change via settings form anytime</li>
+          <li>Show the update in the chat window to everyone other then the person that the person just connected (e.g. "gerry joined the chat!")</li>
+          <li>When we type a message, it’s immediately displayed in the browser under the form.</li>
+        </ul>
+      </p>
+    </li>
 </ul>
 
 <h2>Installation Instructions:</h2>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Real-time Chat</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <a href="/" title="Go back to the apps list">Go back</a>
+    <h1>Real-time Chat</h1>
+    <hr />
+    <h2>Chat settings</h2>
+    <!-- Settings Form -->
+    <form action="/" method="post" id="chat_settings">
+      <label for="displayName" title="Display Name">Display Name</label>
+      <input type="text" placeholder="Your Display Name" name="displayName" id="displayName" size="30" />
+      <input type="submit" title="Save" id="save_settings" value="Save Settings" />
+    </form>
+    <br /><hr /><br />
+    <h2>Start the Chat!</h2>
+    <!-- Chat Form -->
+    <form action="/" method="post" id="chat_form">
+      <input type="text" placeholder="Your Message..." name="chatMessage" id="chatMessage" size="60" autofocus />
+      <input type="submit" title="Send" id="send_message" value="Send" />
+    </form>
+    <br />
+    <!-- Chat area where the messages will appear -->
+    <section id="chat_area" style="height: 400px; overflow-x: scroll"></section>
+
+    <!-- Add Required Scripts -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+
+    <!-- Chat app code -->
+    <script>
+      var socket = io();
+
+      // Ask for the Name
+      var username = prompt('Add your name to chat in the chat room.');
+      var randomNum = Math.round(Math.random() * 100);
+      username = (username !== '' && username !== null && username !== undefined)  ? username : 'Anonymous ' + randomNum;
+
+      // Send a `user_join` signal to server.
+      socket.emit('user_join', username);
+      $('#chat_settings #displayName').val(username);
+      document.title = username + ' - ' + document.title;
+
+      // Receive the `user_join` signal from server to display the message
+      socket.on('user_join', function(username) {
+        insertMessage('user_join', username, '');
+      });
+
+      // Receive the `user_message` signal from server to display the message
+      socket.on('user_message', function(data) {
+        insertMessage('chat_message', data.username, data.message);
+      });
+
+      // Receive the `user_message` signal from server to display the message
+      socket.on('user_rename', function(data) {
+        insertMessage('user_rename', data.username, data.oldUsername);
+      });
+
+      // When the chat form is submitted, the message is sent and displayed on the page.
+      $('#chat_form').submit(function () {
+        var message = $('#chatMessage').val();
+        socket.emit('user_message', message); // Sends the message to the others
+        insertMessage('chat_message', username, message); // Also displays the message on own page
+        $('#chatMessage').val('').focus(); // Empties the chat form and puts the focus back on it
+        return false; // Blocks 'classic' sending of the form
+      });
+
+      // When the setting form is submitted, We change the current user's name.
+      $('#chat_settings').submit(function () {
+        oldUsername = username;
+        username = $('#displayName').val();
+        socket.emit('user_rename', username, oldUsername);
+        insertMessage('user_rename', username, oldUsername);
+        $('#chatMessage').val('').focus();
+        return false;
+      });
+
+      // Prepends the required message to the `Chat Area` to display everyone.
+      function insertMessage(type, username, data) {
+        var displayMessage = '';
+        switch(type) {
+          case 'user_join':
+            displayMessage = '<p><em>' + username + ' has joined the chat!</em></p>';
+            break;
+          case 'chat_message':
+            displayMessage = '<p><strong>' + username + ':</strong> ' + data + '</p>';
+            break;
+          case 'user_rename':
+            displayMessage = '<p><em><strong>' + data + '</strong> has changed the display name to <strong>' + username + '</strong></em></p>';
+            break;
+          default:
+            break;
+        }
+        $('#chat_area').prepend(displayMessage);
+      }
+    </script>
+  </body>
+</html>
